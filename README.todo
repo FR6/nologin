@@ -1,0 +1,18 @@
+x Create package
+x Login
+	- Remove special chars
+	- Validate that it's an email
+x When user does not exist: Confirm the email
+	- Disable first textfield
+x Logout
+- Filter: nologin: Redirect if not loged
+- Allow overwrite views
+
+- Send email to user
+
+TEST:
+- Login 
+	- redirect
+	- without redirect
+	- Not valid email on confirm
+- Logout

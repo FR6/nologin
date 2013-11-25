@@ -1,0 +1,23 @@
+{
+    "name": "houle/nologin",
+    "description": "",
+    "authors": [
+        {
+            "name": "fhoule",
+            "email": "francis.houle@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Houle\\Nologin\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
