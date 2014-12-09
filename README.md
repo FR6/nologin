@@ -28,9 +28,23 @@ Publish configuration:
 
 # Usage
 
-To overwrite views, copy files:
+### Restrict page access
+
+Specify the nologin filter in your routes.php file:
+
+	Route::group(array('before' => 'nologin'), function(){
+		Route::get('/', function() {
+			//...
+		});	
+	});
+
+### Overwrite login views 
+
+Copy files:
+
 	vendor/houle/nologin/src/views/login.blade.php
 	vendor/houle/nologin/src/views/login-confirm.blade.php
 
 to:
+
 	app/views/nologin/
