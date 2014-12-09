@@ -10,7 +10,7 @@ composer.json:
 	},
 	"repositories": [{
         "type": "git",
-        "url": "git@bitbucket.org:Houle/nologin.git"
+        "url": "git@github.com:fr6/nologin.git"
     }]
 
     $ composer update
