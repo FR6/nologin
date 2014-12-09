@@ -42,4 +42,14 @@ class Nolog {
 
 		return $user;
 	}
+
+	public static function login($user){
+
+		Session::put('user', $user);
+
+		$field_email = Config::get('nologin::nologin.db_field_email');
+
+		// Create cookie
+		Cookie::queue('user', $user->$field_email, 60 * 24 * 90); //3 months
+	}
 }

@@ -1,13 +1,7 @@
 <?php
 
-Route::get('nologin', function(){
-	
-	$redirect = Input::get('redirect');
-
-	return View::make('nologin::login', compact('redirect'));
-});
-
-Route::post('nologin', array('uses' => 'NologinController@tryLogin'));
+Route::get('nologin', 'NologinController@getLogin');
+Route::post('nologin', 'NologinController@postLogin');
 
 Route::post('nologin/confirm', array('uses' => 'NologinController@confirmEmail'));
 

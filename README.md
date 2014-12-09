@@ -25,3 +25,12 @@ Add service provider in app/config/app.php
 Publish configuration:
 
 	$ php artisan config:publish houle/nologin
+
+# Usage
+
+To overwrite views, copy files:
+	vendor/houle/nologin/src/views/login.blade.php
+	vendor/houle/nologin/src/views/login-confirm.blade.php
+
+to:
+	app/views/nologin/

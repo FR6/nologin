@@ -1,14 +1,14 @@
 x Create package
 x Login
-	- Remove special chars
-	- Validate that it's an email
+  ✔ Remove special chars @done (14-12-08 22:49)
+  ✔ Validate that it's an email @done (14-12-08 22:49)
 x When user does not exist: Confirm the email
 	- Disable first textfield
 x Logout
 - Filter: nologin: Redirect if not loged
-- Allow overwrite views
+✔ Allow overwrite views @done (14-12-08 22:50)
 
-- Send email to user
+☐ Send email to user
 
 TEST:
 - Login 

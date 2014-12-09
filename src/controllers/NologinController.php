@@ -40,53 +40,85 @@ class NologinController extends BaseController {
 
 	###########################################################################
 
-	// Try to login the user. If not exist, we ask to confirm email.
-	public function tryLogin(){
+	public function getLogin(){
 
-		$email1 = $this->clean_email('email1');
 		$redirect = Input::get('redirect');
-		//dd($redirect);
 
-		//todo validate if it's an email
+		$vars = compact('redirect');
+		$view = 'nologin.login';
+
+		if(View::exists($view)){
+			return View::make($view, $vars);
+		}else{
+			return View::make('nologin::login', $vars);
+		}
+	}
+
+	// Try to login the user. If not exist, we ask to confirm email.
+	public function postLogin(){
+
+		$input = Input::all();
+
+		$redirect = Input::get('redirect');
+		$email = $input['email1'];
+
+		// Validate
+
+		$v = Validator::make($input, array(
+			'email1' => 'required|email'
+		));
+
+		if($v->fails()){
+			die($v->messages());
+		}
+
+		// Get user
 
 		$model = Config::get('nologin::nologin.model_user');
 		$field_email = Config::get('nologin::nologin.db_field_email');
 
-		//dd($model);
-
-		$user = $model::select('*')
-			->where($field_email, '=', $email1)
+		$user = $model::where($field_email, '=', $email)
 			->first();
 
-		//dd($user);
+		if($user){
 
-		if(count($user) > 0){
+			//$user->login();
+			Nolog::login($user);
 
-			//User::setCookie($user);
-			$this->set_session($user);
-
-			return $this->redirect($redirect);		
-
+			//return Redirect::to('/');
+			return $this->redirect($redirect);
+			
 		}else{
+			
+			$vars = compact('email', 'redirect');
+			$view = 'nologin.login-confirm';
 
-			//todo overwrite view
-
-			return View::make('nologin::login-confirm', compact('email1', 'redirect'));
+			if(View::exists($view)){
+				return View::make($view, $vars);
+			}else{
+				return View::make('nologin::login-confirm', $vars);
+			}
 		}
 	}
 
 	// The user doesn't exist so we validate the emails and log the user.
 	public function confirmEmail(){
 
-		// Validate emails
+		$input = Input::all();
 
-		$email1 = $this->clean_email('email1');
-		$email2 = $this->clean_email('email2');
-		$redirect = Input::get('redirect');
+		// Validate
 
-		if($email1 != $email2){
-			echo 'Error: Come on... the two emails need to be identical!!';
-			die();
+		$v = Validator::make($input, array(
+			'email1' => 'required|email',
+			'email2' => 'required|email',
+		));
+
+		if($v->fails()){
+			die($v->messages());
+		}
+
+		if($input['email1'] != $input['email2']){
+			die('Error: Emails are different.');
 		}
 
 		// Create user
@@ -94,21 +126,37 @@ class NologinController extends BaseController {
 		$model = Config::get('nologin::nologin.model_user');
 		$field_email = Config::get('nologin::nologin.db_field_email');
 
-		$user = new $model;
-		$user->$field_email = $email1;
+		$user = $model::where($field_email, '=', $input['email1'])
+			->first();
 
-		$user->save();
+		if(!$user){
+			
+			$user = new $model;
+			$user->$field_email = $input['email1'];
 
-		$this->set_session($user);
-		//User::setCookie($user);
+			$user->save();
+		}
 
-		//return Redirect::to('books');
-		return $this->redirect($redirect);
+		Nolog::login($user);
+
+		return $this->redirect(Input::get('redirect'));
 	}
 
 	public function logout(){
 
-		$this->delete_session();
+		//$this->delete_session();
+
+		if(Session::has('user')){
+
+			$user = Session::get('user');
+
+			// Delete cookie
+
+			Cookie::forget('user'); //necessaire??
+			Cookie::queue('user', '', 60 * 24 * 60); //2 months		
+
+			Session::forget('user');
+		}
 
 		return Redirect::to('nologin');
 	}
