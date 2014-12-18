@@ -60,7 +60,7 @@ class NologinController extends BaseController {
 		$input = Input::all();
 
 		$redirect = Input::get('redirect');
-		$email = $input['email1'];
+		$email1 = $input['email1'];
 
 		// Validate
 
@@ -77,7 +77,7 @@ class NologinController extends BaseController {
 		$model = Config::get('nologin::nologin.model_user');
 		$field_email = Config::get('nologin::nologin.db_field_email');
 
-		$user = $model::where($field_email, '=', $email)
+		$user = $model::where($field_email, '=', $email1)
 			->first();
 
 		if($user){
@@ -90,7 +90,7 @@ class NologinController extends BaseController {
 			
 		}else{
 			
-			$vars = compact('email', 'redirect');
+			$vars = compact('email1', 'redirect');
 			$view = 'nologin.login-confirm';
 
 			if(View::exists($view)){
