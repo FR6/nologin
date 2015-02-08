@@ -27,15 +27,15 @@ class NologinController extends BaseController {
 		NologinController::set_session(null);
 	}
 
-	public static function redirect($to){
+	public static function redirect(){
 
-		if($to){
-			//return Redirect::to($to);
-			dd(Request::root());
-			return Redirect::to(Request::root().$to);
-		}else{
-			return Redirect::to('/');
-		}	
+		// Get redirect session OR /
+		$redirect = Request::root().Session::get('redirect', '/');
+		
+		// Clear session
+		Session::forget('redirect');
+
+		return Redirect::to($redirect);
 	}
 
 	###########################################################################
@@ -85,8 +85,7 @@ class NologinController extends BaseController {
 			//$user->login();
 			Nolog::login($user);
 
-			//return Redirect::to('/');
-			return $this->redirect($redirect);
+			return $this->redirect();
 			
 		}else{
 			
@@ -139,7 +138,8 @@ class NologinController extends BaseController {
 
 		Nolog::login($user);
 
-		return $this->redirect(Input::get('redirect'));
+		//return $this->redirect(Input::get('redirect'));
+		return $this->redirect();
 	}
 
 	public function logout(){

@@ -6,7 +6,7 @@
 
 	{{ Form::open(array('url' => URL::to('nologin/confirm'))) }}
 
-	{{ Form::hidden('redirect', $redirect) }}
+	{{-- Form::hidden('redirect', $redirect) --}}
 
 	{{ Form::label('email1', 'Email:') }}
 	{{ Form::text('email1', $email1) }}
